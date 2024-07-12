@@ -35,6 +35,7 @@ const Login = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
+            <Text style={styles.companyName}>Smarteco</Text>
             <TextInput
                 placeholder="Email"
                 value={email}
@@ -49,7 +50,7 @@ const Login = ({ navigation }) => {
                 style={styles.input}
             />
             {error ? <Text style={styles.error}>{error}</Text> : null}
-            <Button title="Login" onPress={handleLogin} />
+            <Button title="Login" onPress={handleLogin} color="#003366"/>
             <TouchableOpacity onPress={() => navigation.navigate('Register')}>
                 <Text style={styles.link}>Créer un compte</Text>
             </TouchableOpacity>
@@ -61,7 +62,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        padding: 16
+        padding: 16,
+        backgroundColor: '#E0F7FA'
     },
     input: {
         height: 40,

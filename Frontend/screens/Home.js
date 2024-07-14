@@ -15,12 +15,12 @@ const Home = ({ navigation }) => {
             <Image
                 style={styles.image}
                 contentFit="cover"
-                source={require("../assets/4adaee0ecdde0cd3ef4995fb04dfda7d-1.png")}
+                source={require("../assets/home.png")}
             />
             <TouchableOpacity onPress={() => navigation.navigate('Help')} style={styles.helpButton}>
                 <Text style={styles.help}>Help</Text>
             </TouchableOpacity>
-            <Text style={styles.smartScan}>{`Smart Screen`}</Text>
+            <Text style={styles.SmartScreen}>{`Smart Screen`}</Text>
             <Text style={styles.description}>
                 Capturez, convertissez et gérez facilement vos factures avec Smart Scan.
                 Prenez une photo, convertissez-la au format PDF et organisez tout en
@@ -40,13 +40,13 @@ const Home = ({ navigation }) => {
 const styles = StyleSheet.create({
     view: {
         flex: 1,
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "#E0F7FA",
         alignItems: "center",
         paddingHorizontal: width * 0.05,
     },
     image: {
-        width: '114%',
-        height: height * 0.5,
+        width: '100%',
+        height: height * 0.4,
         borderRadius: 20,
         marginTop: height * 0.03,
     },
@@ -58,19 +58,18 @@ const styles = StyleSheet.create({
     help: {
         fontSize: 18,
         color: "#FFFFFF",
-        top: 20,
     },
-    smartScan: {
+    SmartScreen: {
         marginTop: height * 0.02,
         fontSize: 25,
-        color: "#ff9900",
+        color: "#0D1D40",
         textAlign: "center",
         textShadowColor: "rgba(0, 0, 0, 0.25)",
         textShadowOffset: { width: 0, height: 3 },
         textShadowRadius: 7,
     },
     description: {
-        marginTop: height * 0.03,
+        marginTop: height * 0.02,
         fontSize: 19,
         color: "#000000",
         textAlign: "center",
@@ -79,21 +78,20 @@ const styles = StyleSheet.create({
     photoButton: {
         flexDirection: "row",
         alignItems: "center",
-        marginTop: height * 0.05,
-    },
-    takePhoto: {
-        marginLeft: 10,
-        fontSize: 18,
-        color: "white",
-        backgroundColor: "orange",
+        marginTop: height * 0.03,
+        backgroundColor: "#003366",
         borderRadius: 20,
         width: 200,
         height: 40,
-        textAlign: "center",
-        paddingVertical: 6,
-        top: 80,
-        left: -5,
+        justifyContent: "center"
     },
+    takePhoto: {
+        fontSize: 18,
+        color: "white",
+    },
+    c: {
+        marginRight: 10
+    }
 });
 
 export default Home;

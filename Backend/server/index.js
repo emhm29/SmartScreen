@@ -3,7 +3,8 @@ const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
-const { createUser, findUserByEmail } = require('./user'); // Corrected the path
+const { createClaim, findClaimById } = require('./claim');
+const { createUser, findUserByEmail } = require('./user'); 
 
 const app = express();
 app.use(cors());
@@ -59,6 +60,17 @@ const authMiddleware = (req, res, next) => {
 
 app.get('/protected', authMiddleware, (req, res) => {
     res.status(200).json({ message: 'Accès autorisé', userId: req.user.userId });
+});
+
+app.post('/claims', async (req, res) => {
+    const { name, email, description, imageUrl } = req.body;
+    try {
+        const claim = await createClaim(name, email, description, imageUrl);
+        res.status(201).json(claim);
+    } catch (error) {
+        console.error('Error creating claim:', error);
+        res.status(500).json({ error: 'Error creating claim' });
+    }
 });
 
 const PORT = process.env.PORT || 3000;

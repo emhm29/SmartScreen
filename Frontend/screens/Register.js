@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, Text, StyleSheet, Alert } from 'react-native';
+import logo from '../assets/companyLogo.png';
+import { Image } from "expo-image";
+
 
 const Register = ({ navigation }) => {
     const [email, setEmail] = useState('');
@@ -37,6 +40,8 @@ const Register = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
+            <Image source={logo} style={styles.logo} />
+            <Text style={styles.companyName}>Smarteco</Text>
             <TextInput
                 placeholder="Email"
                 value={email}
@@ -51,7 +56,7 @@ const Register = ({ navigation }) => {
                 style={styles.input}
             />
             {error ? <Text style={styles.error}>{error}</Text> : null}
-            <Button title="Register" onPress={handleRegister} />
+            <Button title="Register" onPress={handleRegister} color="#003366" />
         </View>
     );
 };
@@ -60,7 +65,19 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        padding: 16
+        padding: 10,
+        backgroundColor: '#E0F7FA'
+    },
+    logo: {
+        width: 250, 
+        height: 50, 
+        marginBottom: 20 
+    },
+    companyName: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginBottom: 20
     },
     input: {
         height: 40,

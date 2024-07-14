@@ -1,6 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { View, TextInput, Button, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import AuthContext from '../AuthContext'; // Importer le contexte d'authentification
+import logo from '../assets/companyLogo.png';
+import { Image } from "expo-image";
 
 const Login = ({ navigation }) => {
     const [email, setEmail] = useState('');
@@ -35,6 +37,7 @@ const Login = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
+            <Image source={logo} style={styles.logo} />
             <Text style={styles.companyName}>Smarteco</Text>
             <TextInput
                 placeholder="Email"
@@ -65,7 +68,19 @@ const styles = StyleSheet.create({
         padding: 16,
         backgroundColor: '#E0F7FA'
     },
+    logo: {
+        width: 250, 
+        height: 50, 
+        marginBottom: 20 
+    },
+    companyName: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginBottom: 20
+    },
     input: {
+        width: '100%',
         height: 40,
         borderColor: 'gray',
         borderWidth: 1,

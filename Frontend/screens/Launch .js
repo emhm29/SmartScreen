@@ -28,7 +28,7 @@ const Launch = () => {
                     styles.byEmnaHomraniLayout,
                 ]}
                 contentFit="cover"
-                source={require("../assets/d65cdf8f27a20fd0ab9be06227bb74cbremovebgpreview-1.png")}
+                source={require("../assets/logos.png")}
             />
         </View>
     );

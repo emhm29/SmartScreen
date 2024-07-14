@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView, Alert, Dimensions, Modal, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import ImageUploadTwo from './ImageUploadTwo'; // Assume this is your image upload component
+import ImageUploadTwo from './ImageUploadTwo'; // Ensure this component is correctly imported
 import * as Print from 'expo-print';
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -11,7 +11,7 @@ import * as MediaLibrary from 'expo-media-library';
 
 const { width, height } = Dimensions.get('window');
 
-const MessageCard = ({ id, secondary, imageUrl, onDelete, onConvertToPDF }) => {
+const MessageCard = ({ id, secondary, imageUrl, onDelete, onConvertToPDF,claimed, navigation }) => {
   return (
     <View style={styles.messageCard}>
       <View style={styles.messageContent}>
@@ -24,6 +24,9 @@ const MessageCard = ({ id, secondary, imageUrl, onDelete, onConvertToPDF }) => {
             <TouchableOpacity style={styles.pdfButton} onPress={() => onConvertToPDF(imageUrl)}>
               <Text style={styles.pdfButtonText}>Convert to PDF</Text>
             </TouchableOpacity>
+            <TouchableOpacity style={[styles.claimButton, claimed && styles.claimButtonClaimed]} onPress={() => navigation.navigate('ClaimForm', { imageUrl })}>
+              <Text style={styles.claimButtonText}>Déposer une réclamation</Text>
+            </TouchableOpacity>
           </>
         )}
       </View>
@@ -35,12 +38,12 @@ const MessageCard = ({ id, secondary, imageUrl, onDelete, onConvertToPDF }) => {
 };
 
 const PdfScanner = () => {
+  const navigation = useNavigation();
   const [inputValue, setInputValue] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [messages, setMessages] = useState([]);
   const [pdfUri, setPdfUri] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const navigation = useNavigation();
 
   useEffect(() => {
     const loadMessages = async () => {
@@ -101,14 +104,7 @@ const PdfScanner = () => {
 
   const handleConvertToPDF = async (image) => {
     try {
-      const html = `
-        <html>
-          <body>
-            <img src="${image}" style="width: 100%; height: auto;" />
-          </body>
-        </html>
-      `;
-
+      const html = `<html><body><img src="${image}" style="width: 100%; height: auto;" /></body></html>`;
       const { uri } = await Print.printToFileAsync({ html });
       setPdfUri(uri);
       setModalVisible(true);
@@ -143,16 +139,8 @@ const PdfScanner = () => {
     }
   };
 
-
-
   return (
     <View style={styles.view}>
-      <TouchableOpacity
-        style={styles.navigationButton}
-        onPress={() => navigation.navigate('PdfEditor')}
-      >
-        <Feather name="edit" size={24} color="black" />
-      </TouchableOpacity>
       <ScrollView style={styles.messageContainer}>
         {messages.map(message => (
           <MessageCard
@@ -160,6 +148,7 @@ const PdfScanner = () => {
             {...message}
             onDelete={handleDeleteMessage}
             onConvertToPDF={handleConvertToPDF}
+            navigation={navigation}
           />
         ))}
       </ScrollView>
@@ -173,29 +162,16 @@ const PdfScanner = () => {
         animationType="slide"
         transparent={true}
         visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
+        onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.modalView}>
           {pdfUri && (
-            <WebView
-              style={styles.webview}
-              source={{ uri: pdfUri }}
-              originWhitelist={['*']}
-              allowFileAccess={true}
-            />
+            <WebView style={styles.webview} source={{ uri: pdfUri }} originWhitelist={['*']} allowFileAccess={true} />
           )}
-          <TouchableOpacity
-            style={styles.closeButton}
-            onPress={() => setModalVisible(!modalVisible)}
-          >
+          <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
             <Text style={styles.closeButtonText}>Close</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.downloadButton}
-            onPress={handleDownloadPDF}
-          >
+          <TouchableOpacity style={styles.downloadButton} onPress={handleDownloadPDF}>
             <Text style={styles.downloadButtonText}>Download PDF</Text>
           </TouchableOpacity>
         </View>
@@ -210,6 +186,18 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     alignItems: "center",
     paddingHorizontal: width * 0.05,
+  },
+  claimButton: {
+    marginTop: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    backgroundColor: '#4CAF50', // Couleur verte pour indiquer une action positive
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  claimButtonClaimed: {
+    backgroundColor: 'red', // Couleur rouge pour indiquer une réclamation déjà faite
   },
   messageContainer: {
     flex: 1,

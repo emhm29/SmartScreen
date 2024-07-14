@@ -19,7 +19,7 @@ app.post('/register', async (req, res) => {
             return res.status(400).json({ error: 'Email déjà utilisé' });
         }
 
-        const user = await createUser(email, password);
+        const user = await createUser(email, password,role);
         res.status(201).json(user);
     } catch (error) {
         console.error('Error creating user:', error);
@@ -27,7 +27,7 @@ app.post('/register', async (req, res) => {
     }
 });
 
-app.post('/login', async (req, res) => {
+aapp.post('/login', async (req, res) => {
     const { email, password } = req.body;
     console.log('Login attempt for:', email);
     
@@ -43,7 +43,7 @@ app.post('/login', async (req, res) => {
 
         console.log('Password correct');
     }) ;
-
+    
 const authMiddleware = (req, res, next) => {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) {

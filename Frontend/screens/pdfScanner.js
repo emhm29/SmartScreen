@@ -24,8 +24,8 @@ const MessageCard = ({ id, secondary, imageUrl, onDelete, onConvertToPDF,claimed
             <TouchableOpacity style={styles.pdfButton} onPress={() => onConvertToPDF(imageUrl)}>
               <Text style={styles.pdfButtonText}>Convert to PDF</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.claimButton, claimed && styles.claimButtonClaimed]} onPress={() => navigation.navigate('ClaimForm', { imageUrl })}>
-              <Text style={styles.claimButtonText}>Déposer une réclamation</Text>
+            <TouchableOpacity style={[styles.claimButton, claimed && styles.claimButtonClaimed] } onPress={() => navigation.navigate('ClaimForm', { imageUrl })}>
+              <Text style={[styles.claimButtonText, { color: 'white' }]}>Déposer une réclamation </Text>
             </TouchableOpacity>
           </>
         )}
@@ -183,7 +183,7 @@ const PdfScanner = () => {
 const styles = StyleSheet.create({
   view: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: '#E0F7FA',
     alignItems: "center",
     paddingHorizontal: width * 0.05,
   },
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     paddingVertical: 8,
     paddingHorizontal: 12,
-    backgroundColor: '#4CAF50', // Couleur verte pour indiquer une action positive
+    backgroundColor: '#A7C957', // Couleur verte pour indiquer une action positive
     borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'center',
@@ -224,6 +224,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     fontSize: 14,
     color: '#666',
+    
   },
   imageContainer: {
     borderWidth: 1,
@@ -235,6 +236,7 @@ const styles = StyleSheet.create({
   messageImage: {
     width: '100%',
     height: 200,
+    
   },
   inputContainer: {
     flexDirection: 'row',
@@ -246,17 +248,18 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   postButton: {
-    backgroundColor: '#ff9900',
+    backgroundColor: '#003366',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
+    
   },
   pdfButton: {
     marginTop: 10,
     padding: 10,
-    backgroundColor: '#ff9900',
+    backgroundColor: '#003366',
     borderRadius: 5,
     alignItems: 'center',
   },
@@ -284,7 +287,7 @@ const styles = StyleSheet.create({
   closeButton: {
     marginTop: 10,
     padding: 10,
-    backgroundColor: '#2196F3',
+    backgroundColor: '#003366',
     borderRadius: 10,
   },
   closeButtonText: {
@@ -294,7 +297,7 @@ const styles = StyleSheet.create({
   downloadButton: {
     marginTop: 10,
     padding: 10,
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#003366',
     borderRadius: 10,
   },
   downloadButtonText: {

@@ -82,10 +82,10 @@ const ImageUploadTwo = ({ changeImage }) => {
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.customButtonFolder} onPress={openImagePicker}>
             
-          <EvilIcons name="image" size={54} color="#AF6A00" style={styles.buttonImage} />
+          <EvilIcons name="image" size={54} color='#003366' style={styles.buttonImage} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.customButtonCamera} onPress={handleCameraLaunch}>
-          <Feather name="camera" size={39} color="#AF6A00" style={styles.buttonImag}/>
+          <Feather name="camera" size={39} color='#003366' style={styles.buttonImag}/>
         </TouchableOpacity>
       </View>
     </View>

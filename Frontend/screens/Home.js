@@ -33,6 +33,13 @@ const Home = ({ navigation }) => {
                     <Feather name="camera" size={24} color="white" style={styles.c}/>  Commencer
                 </Text>
             </TouchableOpacity>
+            <TouchableOpacity 
+                style={styles.invoiceButton}
+                onPress={() => navigation.navigate('InvoiceScanner')} >
+                <Text style={styles.scanInvoice}>
+                    <Feather name="file-text" size={24} color="white" style={styles.c}/>  Scanner Facture
+                </Text>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -86,6 +93,20 @@ const styles = StyleSheet.create({
         justifyContent: "center"
     },
     takePhoto: {
+        fontSize: 18,
+        color: "white",
+    },
+    invoiceButton: {
+        flexDirection: "row",
+        alignItems: "center",
+        marginTop: height * 0.02,
+        backgroundColor: "#4CAF50",
+        borderRadius: 20,
+        width: 200,
+        height: 40,
+        justifyContent: "center"
+    },
+    scanInvoice: {
         fontSize: 18,
         color: "white",
     },

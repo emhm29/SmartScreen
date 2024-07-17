@@ -11,6 +11,7 @@ import pdfScanner from './screens/pdfScanner'; // Assurez-vous que le chemin est
 import PdfEditor from './screens/PdfEditor'; // Assurez-vous que le chemin est correct
 import Onbording from './screens/Onbording'; // Assurez-vous que le chemin est correct
 import ClaimForm from'./screens/ClaimForm';
+import InvoiceScanner from './screens/InvoiceScanner';
 
 const Stack = createStackNavigator();
 
@@ -28,6 +29,7 @@ const App = () => {
           <Stack.Screen name="pdfScanner" component={pdfScanner} /> 
           <Stack.Screen name="ClaimForm" component={ClaimForm}/>
           <Stack.Screen name="PdfEditor" component={PdfEditor} /> 
+          <Stack.Screen name="InvoiceScanner" component={InvoiceScanner} />
         </Stack.Navigator>
       </NavigationContainer>
     </AuthProvider>

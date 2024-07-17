@@ -3,12 +3,14 @@ const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
+const axios = require('axios'); // Ajoutez axios pour faire des requêtes HTTP
 const { createClaim, findClaimById } = require('./claim');
 const { createUser, findUserByEmail } = require('./user'); 
 
 const app = express();
 app.use(cors());
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '50mb' })); // Augmente la limite de taille des requêtes JSON
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true })); // Augmente la limite de taille des requêtes URL-encoded
 
 
 app.post('/register', async (req, res) => {
@@ -27,7 +29,7 @@ app.post('/register', async (req, res) => {
     }
 });
 
-aapp.post('/login', async (req, res) => {
+app.post('/login', async (req, res) => {
     const { email, password } = req.body;
     console.log('Login attempt for:', email);
     
@@ -70,6 +72,41 @@ app.post('/claims', async (req, res) => {
     } catch (error) {
         console.error('Error creating claim:', error);
         res.status(500).json({ error: 'Error creating claim' });
+    }
+});
+// Route de reconnaissance d'image
+app.post('/analyze-image', async (req, res) => {
+    const { imageBase64, name, email, description, imageUrl } = req.body;
+    const API_KEY = 'AIzaSyAh-pVHDkzpgs6YcOJV613DkMXLNeWHi2Q';
+    try {
+        console.log('Envoi de l\'image à l\'API Google Vision');
+        const response = await axios.post(
+            `https://vision.googleapis.com/v1/images:annotate?key=${API_KEY}`,
+            {
+                requests: [
+                    {
+                        image: {
+                            content: imageBase64,
+                        },
+                        features: [
+                            {
+                                type: 'TEXT_DETECTION',
+                            },
+                        ],
+                    },
+                ],
+            }
+        );
+        console.log('Réponse de l\'API Google Vision :', response.data);
+        const textAnnotations = response.data.responses[0].textAnnotations;
+        const recognizedText = textAnnotations ? textAnnotations[0].description : '';
+
+        // Insertion des données dans la base de données
+        const claim = await createClaim(name, email, description, imageUrl);
+        res.status(200).json({ recognizedText, claim });
+    } catch (error) {
+        console.error('Erreur lors de l\'analyse de l\'image :', error);
+        res.status(500).json({ error: 'Erreur lors de l\'analyse de l\'image' });
     }
 });
 

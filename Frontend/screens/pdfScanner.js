@@ -141,6 +141,12 @@ const PdfScanner = () => {
 
   return (
     <View style={styles.view}>
+      <TouchableOpacity
+        style={styles.navigationButton}
+        onPress={() => navigation.navigate('PdfEditor')}
+      >
+        <Feather name="edit" size={24} color="black" />
+      </TouchableOpacity>
       <ScrollView style={styles.messageContainer}>
         {messages.map(message => (
           <MessageCard

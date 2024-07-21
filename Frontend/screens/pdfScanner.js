@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView, Alert, Dimensions, Modal, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import ImageUploadTwo from './ImageUploadTwo'; // Ensure this component is correctly imported
+import ImageUploadTwo from './ImageUploadTwo'; // Assurez-vous que ce composant est correctement importé
 import * as Print from 'expo-print';
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -11,7 +11,7 @@ import * as MediaLibrary from 'expo-media-library';
 
 const { width, height } = Dimensions.get('window');
 
-const MessageCard = ({ id, secondary, imageUrl, onDelete, onConvertToPDF,claimed, navigation }) => {
+const MessageCard = ({ id, secondary, imageUrl, onDelete, onConvertToPDF, claimed, navigation }) => {
   return (
     <View style={styles.messageCard}>
       <View style={styles.messageContent}>
@@ -24,8 +24,8 @@ const MessageCard = ({ id, secondary, imageUrl, onDelete, onConvertToPDF,claimed
             <TouchableOpacity style={styles.pdfButton} onPress={() => onConvertToPDF(imageUrl)}>
               <Text style={styles.pdfButtonText}>Convert to PDF</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.claimButton, claimed && styles.claimButtonClaimed] } onPress={() => navigation.navigate('ClaimForm', { imageUrl })}>
-              <Text style={[styles.claimButtonText, { color: 'white' }]}>Déposer une réclamation </Text>
+            <TouchableOpacity style={[styles.claimButton, claimed && styles.claimButtonClaimed]} onPress={() => navigation.navigate('ClaimForm', { imageUrl })}>
+              <Text style={[styles.claimButtonText, { color: 'white' }]}>Déposer une réclamation</Text>
             </TouchableOpacity>
           </>
         )}
@@ -44,6 +44,7 @@ const PdfScanner = () => {
   const [messages, setMessages] = useState([]);
   const [pdfUri, setPdfUri] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     const loadMessages = async () => {
@@ -99,11 +100,13 @@ const PdfScanner = () => {
   };
 
   const handleChangeImage = (url) => {
+    console.log('Selected image URL:', url); // Debug log
     setImageUrl(url);
   };
 
   const handleConvertToPDF = async (image) => {
     try {
+      setSelectedImage(image);
       const html = `<html><body><img src="${image}" style="width: 100%; height: auto;" /></body></html>`;
       const { uri } = await Print.printToFileAsync({ html });
       setPdfUri(uri);
@@ -171,8 +174,12 @@ const PdfScanner = () => {
         onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.modalView}>
-          {pdfUri && (
-            <WebView style={styles.webview} source={{ uri: pdfUri }} originWhitelist={['*']} allowFileAccess={true} />
+          {selectedImage && (
+            <WebView
+              style={styles.webview}
+              originWhitelist={['*']}
+              source={{ html: `<html><body><img src="${selectedImage}" style="width: 100%; height: auto;" /></body></html>` }}
+            />
           )}
           <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
             <Text style={styles.closeButtonText}>Close</Text>
@@ -230,7 +237,6 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     fontSize: 14,
     color: '#666',
-    
   },
   imageContainer: {
     borderWidth: 1,
@@ -242,7 +248,6 @@ const styles = StyleSheet.create({
   messageImage: {
     width: '100%',
     height: 200,
-    
   },
   inputContainer: {
     flexDirection: 'row',
@@ -260,7 +265,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
-    
   },
   pdfButton: {
     marginTop: 10,

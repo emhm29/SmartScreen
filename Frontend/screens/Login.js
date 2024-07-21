@@ -1,101 +1,65 @@
-import React, { useState, useContext } from 'react';
-import { View, TextInput, Button, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
-import AuthContext from '../AuthContext'; // Importer le contexte d'authentification
-import logo from '../assets/companyLogo.png';
-import { Image } from "expo-image";
+import React, { useContext, useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import AuthContext from '../AuthContext';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({ navigation }) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const { login } = useContext(AuthContext); // Utiliser le contexte
+  const { login } = useContext(AuthContext);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-    const handleLogin = () => {
-        console.log('Tentative de connexion avec:', email, password);
-    
-        // Mock response for testing
-        const mockResponse = {
-            status: 200,
-            body: {
-                token: 'mock-token'
-            }
-        };
-    
-        setTimeout(() => {
-            console.log('Mock response:', mockResponse);
-            if (mockResponse.status === 200) {
-                login(mockResponse.body.token);
-                console.log('Token:', mockResponse.body.token);
-                console.log('Navigation vers Home');
-                Alert.alert('Navigation', 'Navigation vers Home');
-                navigation.navigate('Home');
-            } else {
-                setError(mockResponse.body.error || 'Erreur lors de la connexion');
-            }
-        }, 1000); // Simulate network delay
-    };
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post('http://192.168.1.8:3000/login', { email, password });
+      const { token } = response.data;
+      await AsyncStorage.setItem('userToken', token); // Stocker le token
+      login(token);
+      navigation.navigate('Home');
+    } catch (error) {
+      console.error('Error logging in:', error);
+    }
+  };
 
-    return (
-        <View style={styles.container}>
-            <Image source={logo} style={styles.logo} />
-            <Text style={styles.companyName}>Smarteco</Text>
-            <TextInput
-                placeholder="Email"
-                value={email}
-                onChangeText={setEmail}
-                style={styles.input}
-            />
-            <TextInput
-                placeholder="Password"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-                style={styles.input}
-            />
-            {error ? <Text style={styles.error}>{error}</Text> : null}
-            <Button title="Login" onPress={handleLogin} color="#003366"/>
-            <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-                <Text style={styles.link}>Créer un compte</Text>
-            </TouchableOpacity>
-        </View>
-    );
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Login</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
+      <Button title="Login" onPress={handleLogin} />
+      <Button title="Register" onPress={() => navigation.navigate('Register')} />
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        padding: 16,
-        backgroundColor: '#E0F7FA'
-    },
-    logo: {
-        width: 250, 
-        height: 50, 
-        marginBottom: 20 
-    },
-    companyName: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        marginBottom: 20
-    },
-    input: {
-        width: '100%',
-        height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
-        marginBottom: 12,
-        padding: 8
-    },
-    error: {
-        color: 'red',
-        marginBottom: 12
-    },
-    link: {
-        color: 'blue',
-        marginTop: 12,
-        textAlign: 'center'
-    }
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 16,
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 16,
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 12,
+    paddingHorizontal: 8,
+  },
 });
 
 export default Login;

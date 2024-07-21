@@ -27,17 +27,25 @@ const Home = ({ navigation }) => {
                 toute sécurité au même endroit.
             </Text>
             <TouchableOpacity 
-                style={styles.photoButton}
-                onPress={() => navigation.navigate('pdfScanner')} >
-                <Text style={styles.takePhoto}>
-                    <Feather name="camera" size={24} color="white" style={styles.c}/>  Commencer
+    style={styles.photoButton}
+    onPress={() => navigation.navigate('PdfScanner')} >
+    <Text style={styles.takePhoto}>
+        <Feather name="camera" size={24} color="white" style={styles.c}/>  Commencer
+    </Text>
+</TouchableOpacity>
+            <TouchableOpacity 
+                style={styles.recognitionButton}
+                onPress={() => navigation.navigate('InvoiceRecognition')} >
+                <Text style={styles.recognitionText}>
+                    <Feather name="file-text" size={20} color="white" style={styles.c}/>  Reconnaître Facture
                 </Text>
             </TouchableOpacity>
+            {/* Nouveau bouton pour naviguer vers Invoices */}
             <TouchableOpacity 
                 style={styles.invoiceButton}
-                onPress={() => navigation.navigate('InvoiceScanner')} >
+                onPress={() => navigation.navigate('Invoices')} >
                 <Text style={styles.scanInvoice}>
-                    <Feather name="file-text" size={24} color="white" style={styles.c}/>  Scanner Facture
+                    <Feather name="file-text" size={20} color="white" style={styles.c}/>  Voir les Factures
                 </Text>
             </TouchableOpacity>
         </View>
@@ -110,8 +118,22 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: "white",
     },
+    recognitionButton: {
+        flexDirection: "row",
+        alignItems: "center",
+        marginTop: height * 0.02,
+        backgroundColor: "#A7C957",
+        borderRadius: 50,
+        width: 200,
+        height: 40,
+        justifyContent: "center"
+    },
+    recognitionText: {
+        fontSize: 18,
+        color: "white",
+    },
     c: {
-        marginRight: 10
+        marginRight: 50
     }
 });
 

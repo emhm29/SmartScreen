@@ -1,95 +1,67 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet, Alert } from 'react-native';
-import logo from '../assets/companyLogo.png';
-import { Image } from "expo-image";
-
+import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import axios from 'axios';
 
 const Register = ({ navigation }) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [role, setRole] = useState('user'); // Nouvel état pour le rôle
 
-    const handleRegister = () => {
-        console.log('Tentative d\'inscription avec:', email, password);
-        fetch('http://192.168.1.8:3000/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email, password })
-        })
-        .then((response) => {
-            console.log('Réponse brute:', response);
-            return response.json().then(data => ({ status: response.status, body: data }));
-        })
-        .then(({ status, body }) => {
-            console.log('Données de la réponse:', body);
-            if (status === 201) {
-                Alert.alert('Inscription réussie', 'Vous pouvez maintenant vous connecter');
-                navigation.navigate('Login');
-            } else {
-                setError(body.error || 'Erreur lors de l\'inscription');
-            }
-        })
-        .catch((error) => {
-            setError('Erreur lors de l\'inscription');
-            console.error('Erreur de réseau:', error);
-            Alert.alert('Erreur de réseau', error.message);
-        });
-    };
+  const handleRegister = async () => {
+    try {
+      const response = await axios.post('http://192.168.1.8:3000/register', { email, password, role });
+      alert('Inscription réussie');
+      navigation.navigate('Login'); // Naviguer vers la page de connexion après inscription
+    } catch (error) {
+      console.error('Error registering:', error);
+    }
+  };
 
-    return (
-        <View style={styles.container}>
-            <Image source={logo} style={styles.logo} />
-            <Text style={styles.companyName}>Smarteco</Text>
-            <TextInput
-                placeholder="Email"
-                value={email}
-                onChangeText={setEmail}
-                style={styles.input}
-            />
-            <TextInput
-                placeholder="Password"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-                style={styles.input}
-            />
-            {error ? <Text style={styles.error}>{error}</Text> : null}
-            <Button title="Register" onPress={handleRegister} color="#003366" />
-        </View>
-    );
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Register</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Role (user or comptable)"
+        value={role}
+        onChangeText={setRole}
+      />
+      <Button title="Register" onPress={handleRegister} />
+      <Button title="Back to Login" onPress={() => navigation.navigate('Login')} />
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        padding: 10,
-        backgroundColor: '#E0F7FA'
-    },
-    logo: {
-        width: 250, 
-        height: 50, 
-        marginBottom: 20 
-    },
-    companyName: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        marginBottom: 20
-    },
-    input: {
-        height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
-        marginBottom: 12,
-        padding: 8
-    },
-    error: {
-        color: 'red',
-        marginBottom: 12
-    }
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 16,
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 16,
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 12,
+    paddingHorizontal: 8,
+  },
 });
 
 export default Register;

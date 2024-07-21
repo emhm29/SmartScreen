@@ -3,6 +3,7 @@
     "name": "SmartScreen",
     "slug": "SmartScreen",
     "version": "1.0.0",
+    "sdkVersion": "51.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -16,6 +17,8 @@
     },
     "android": {
       "permissions": [
+        "INTERNET",
+        "CAMERA",
         "READ_EXTERNAL_STORAGE",
         "WRITE_EXTERNAL_STORAGE"
       ],

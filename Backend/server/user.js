@@ -9,14 +9,14 @@ const pool = mysql.createPool({
   database: 'smartscreen'
 });
 
-const createUser = async (email, password,role = 'user') => {
-  const hashedPassword = await bcrypt.hash(password, 10);
-  console.log('Password:', password); // Log the hashed password
+const createUser = async (email, password, role = 'user') => {
+  const saltRounds = 10;
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
   const [result] = await pool.query(
-    'INSERT INTO users (email, password,role) VALUES (?, ?, ?)',
-    [email, hashedPassword]
+    'INSERT INTO users (email, password, role) VALUES (?, ?, ?)',
+    [email, hashedPassword, role]
   );
-  return { id: result.insertId, email,role };
+  return { id: result.insertId, email, role };
 };
 
 const findUserByEmail = async (email) => {

@@ -1,3 +1,5 @@
+// user.js
+
 const mysql = require('mysql2/promise');
 const bcrypt = require('bcrypt');
 
@@ -8,8 +10,17 @@ const pool = mysql.createPool({
   password: '',
   database: 'smartscreen'
 });
+const getClaims = async () => {
+  try {
+    const [rows] = await pool.query('SELECT * FROM claims');
+    return rows;
+  } catch (error) {
+    console.error('Error executing query', error);  // Add error logging
+    throw error;
+  }
+};
 
-const createUser = async (email, password, role = 'user') => {
+const createUser = async (email, password, role) => {
   const saltRounds = 10;
   const hashedPassword = await bcrypt.hash(password, saltRounds);
   const [result] = await pool.query(
@@ -27,7 +38,28 @@ const findUserByEmail = async (email) => {
   return rows[0];
 };
 
+const updateUser = async (id, newEmail, newPassword) => {
+  const saltRounds = 10;
+  const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+  await pool.query(
+    'UPDATE users SET email = ?, password = ? WHERE id = ?',
+    [newEmail, hashedPassword, id]
+  );
+  return { id, email: newEmail };
+};
+
+const deleteUser = async (id) => {
+  await pool.query(
+    'DELETE FROM users WHERE id = ?',
+    [id]
+  );
+  return { id };
+};
+
 module.exports = {
   createUser,
   findUserByEmail,
+  updateUser,
+  deleteUser,
+  getClaims,
 };

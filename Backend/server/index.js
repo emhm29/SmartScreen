@@ -4,7 +4,8 @@ const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const mysql = require('mysql2'); 
-const { createUser, findUserByEmail } = require('./user');
+const crypto = require('crypto');
+const { createUser, findUserByEmail, updateUser, deleteUser, getClaims } = require('./user');
 
 const app = express();
 app.use(cors());
@@ -32,16 +33,13 @@ connection.connect((err) => {
 const authMiddleware = (req, res, next) => {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
-        console.log('Token manquant');
         return res.status(401).json({ error: 'Token manquant' });
     }
     try {
         const decoded = jwt.verify(token, 'hardcodedSecretKey');
         req.user = decoded;
-        console.log('Token décodé:', decoded); // Ajout de log pour vérifier le token décodé
         next();
     } catch (error) {
-        console.log('Token invalide:', error);
         res.status(401).json({ error: 'Token invalide' });
     }
 };
@@ -65,11 +63,9 @@ app.post('/register', async (req, res) => {
         if (userExists) {
             return res.status(400).json({ error: 'Email déjà utilisé' });
         }
-
         const user = await createUser(email, password, role.toLowerCase());
         res.status(201).json(user);
     } catch (error) {
-        console.error('Error creating user:', error);
         res.status(500).json({ error: 'Erreur lors de la création de l’utilisateur' });
     }
 });
@@ -77,26 +73,53 @@ app.post('/register', async (req, res) => {
 
 // Route de connexion
 app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+  try {
+      console.log('Attempting to log in with email:', email);
+
+      const user = await findUserByEmail(email);
+      if (!user) {
+          console.log('User not found');
+          return res.status(401).json({ error: 'Email ou mot de passe incorrect' });
+      }
+
+      console.log('User found:', user);
+
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+          console.log('Invalid password');
+          return res.status(401).json({ error: 'Email ou mot de passe incorrect' });
+      }
+
+      const token = jwt.sign({ userId: user.id, role: user.role.trim().toLowerCase() }, 'hardcodedSecretKey', { expiresIn: '1h' });
+      console.log('User role:', user.role.trim().toLowerCase());
+      res.status(200).json({ token, id: user.id, role: user.role.trim().toLowerCase() });
+  } catch (error) {
+      console.error('Error logging in user:', error);
+      res.status(500).json({ error: 'Erreur lors de la connexion de l’utilisateur' });
+  }
+});
+app.put('/user/:id', async (req, res) => {
+    const { id } = req.params;
     const { email, password } = req.body;
     try {
-        const user = await findUserByEmail(email);
-        if (!user) {
-            return res.status(401).json({ error: 'Email ou mot de passe incorrect' });
-        }
-
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) {
-            return res.status(401).json({ error: 'Email ou mot de passe incorrect' });
-        }
-
-        const token = jwt.sign({ userId: user.id, role: user.role.trim().toLowerCase() }, 'hardcodedSecretKey', { expiresIn: '1h' });
-        console.log('User role:', user.role.trim().toLowerCase()); // Ajout de log pour vérifier le rôle de l'utilisateur
-        res.status(200).json({ token });
+        const updatedUser = await updateUser(id, email, password);
+        res.status(200).json(updatedUser);
     } catch (error) {
-        console.error('Error logging in user:', error);
-        res.status(500).json({ error: 'Erreur lors de la connexion de l’utilisateur' });
+        res.status(500).json({ error: 'Erreur lors de la mise à jour de l’utilisateur' });
     }
 });
+
+app.delete('/user/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const deletedUser = await deleteUser(id);
+        res.status(200).json(deletedUser);
+    } catch (error) {
+        res.status(500).json({ error: 'Erreur lors de la suppression de l’utilisateur' });
+    }
+});
+
 
 // Route protégée
 app.get('/protected', authMiddleware, (req, res) => {
@@ -229,7 +252,15 @@ app.put('/invoices/:id', authMiddleware, roleMiddleware('comptable'), (req, res)
         });
     });
 });
-
+app.get('/claims', async (req, res) => {
+    try {
+        const claims = await getClaims();
+        res.status(200).json(claims);
+    } catch (error) {
+        console.error('Error fetching claims:', error);  // Add error logging
+        res.status(500).json({ error: 'Erreur lors de la récupération des réclamations' });
+    }
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

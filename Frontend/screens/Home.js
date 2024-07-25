@@ -33,21 +33,6 @@ const Home = ({ navigation }) => {
         <Feather name="camera" size={24} color="white" style={styles.c}/>  Commencer
     </Text>
 </TouchableOpacity>
-            <TouchableOpacity 
-                style={styles.recognitionButton}
-                onPress={() => navigation.navigate('InvoiceRecognition')} >
-                <Text style={styles.recognitionText}>
-                    <Feather name="file-text" size={20} color="white" style={styles.c}/>  Reconnaître Facture
-                </Text>
-            </TouchableOpacity>
-            {/* Nouveau bouton pour naviguer vers Invoices */}
-            <TouchableOpacity 
-                style={styles.invoiceButton}
-                onPress={() => navigation.navigate('Invoices')} >
-                <Text style={styles.scanInvoice}>
-                    <Feather name="file-text" size={20} color="white" style={styles.c}/>  Voir les Factures
-                </Text>
-            </TouchableOpacity>
         </View>
     );
 };

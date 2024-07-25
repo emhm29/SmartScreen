@@ -21,12 +21,18 @@ const MessageCard = ({ id, secondary, imageUrl, onDelete, onConvertToPDF, claime
             <TouchableOpacity style={styles.imageContainer} onPress={() => Alert.alert('Image Clicked', 'Show full image functionality here')}>
               <Image source={{ uri: imageUrl }} style={styles.messageImage} resizeMode="contain" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.pdfButton} onPress={() => onConvertToPDF(imageUrl)}>
-              <Text style={styles.pdfButtonText}>Convert to PDF</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.claimButton, claimed && styles.claimButtonClaimed]} onPress={() => navigation.navigate('ClaimForm', { imageUrl })}>
-              <Text style={[styles.claimButtonText, { color: 'white' }]}>Déposer une réclamation</Text>
-            </TouchableOpacity>
+            <TouchableOpacity style={styles.buttonStyle} onPress={() => onConvertToPDF(imageUrl)}>
+  <Text style={styles.pdfButtonText}>Convert to PDF</Text>
+</TouchableOpacity>
+<TouchableOpacity style={styles.buttonStyle} onPress={() => navigation.navigate('InvoiceRecognition')}>
+  <Text style={styles.recognitionText}>
+    <Feather name="file-text" size={20} color="white" style={styles.c}/>  Reconnaître Facture
+  </Text>
+</TouchableOpacity>
+<TouchableOpacity style={[styles.buttonStyle, claimed && styles.claimButtonClaimed]} onPress={() => navigation.navigate('ClaimForm', { imageUrl })}>
+  <Text style={styles.claimButtonText}>Déposer une réclamation</Text>
+</TouchableOpacity>
+
           </>
         )}
       </View>
@@ -319,6 +325,41 @@ const styles = StyleSheet.create({
     top: 50,
     right: 20,
   },
+  recognitionButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: height * 0.02,
+    backgroundColor: "#A7C957",
+    borderRadius: 50,
+    width: 200,
+    height: 40,
+    justifyContent: "center"
+},
+recognitionText: {
+    fontSize: 18,
+    color: "white",
+},
+buttonStyle: {
+  marginTop: 10,
+  paddingVertical: 10,
+  paddingHorizontal: 20,
+  backgroundColor: '#003366',
+  borderRadius: 5,
+  alignItems: 'center',
+  width: 200, // Largeur uniforme pour tous les boutons
+},
+pdfButtonText: {
+  color: '#fff',
+  fontSize: 16,
+},
+claimButtonText: {
+  color: '#fff',
+  fontSize: 16,
+},
+recognitionText: {
+  color: '#fff',
+  fontSize: 16,
+},
 });
 
 export default PdfScanner;

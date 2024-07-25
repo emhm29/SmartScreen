@@ -210,7 +210,7 @@ const InvoiceRecognition = () => {
         style={styles.button}
         onPress={() => sendDataToBackend(invoiceData)}
       >
-        <Text style={styles.buttonText}>Envoyer des données au backend</Text>
+        <Text style={styles.buttonText}>Enregistrer</Text>
       </TouchableOpacity>
     </ScrollView>
   );

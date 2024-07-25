@@ -37,3 +37,8 @@ CREATE TABLE invoice_items (
   total_ttc_item DECIMAL(10, 2) NOT NULL,
   FOREIGN KEY (invoice_id) REFERENCES invoices(id)
 );
+CREATE TABLE create_pdf (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    text_content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

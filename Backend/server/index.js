@@ -6,12 +6,13 @@ const bcrypt = require('bcrypt');
 const mysql = require('mysql2'); 
 const crypto = require('crypto');
 const fileUpload = require('express-fileupload');
-const pdfParse = require('pdf-parse');
-const Poppler = require('pdf-poppler');
-const Tesseract = require('tesseract.js');
 const path = require('path');
 const fs = require('fs');
+const { exec } = require('child_process');
+const { PDFDocument } = require('pdf-lib');
+const multer = require('multer'); // Ajoutez cette ligne pour importer multer
 const { createUser, findUserByEmail, updateUser, deleteUser, getClaims } = require('./user');
+const pdfParse = require('pdf-parse');
 
 const app = express();
 app.use(cors());
@@ -272,72 +273,36 @@ app.get('/claims', async (req, res) => {
         res.status(500).json({ error: 'Erreur lors de la récupération des réclamations' });
     }
 });
-const uploadPath = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadPath)) {
-  fs.mkdirSync(uploadPath);
-}
-// Route for extracting text from a PDF
-app.post('/extract-text', async (req, res) => {
-    if (!req.files || !req.files.pdf) {
-      console.log('No file uploaded.');
-      return res.status(400).send('No file uploaded.');
-    }
-  
-    const pdfBuffer = req.files.pdf.data;
-    const pdfPath = path.join(uploadPath, `${Date.now()}.pdf`);
-  
-    // Sauvegarde temporaire du PDF pour conversion
-    fs.writeFileSync(pdfPath, pdfBuffer);
-  
+
+const upload = multer({ dest: 'uploads/' });
+
+app.post('/upload', upload.single('pdf'), async (req, res) => {
+    const pdfPath = req.file.path;
+
     try {
-      const data = await pdfParse(pdfBuffer);
-      console.log('Extracted text:', data.text);
-  
-      if (!data.text || data.text.trim() === '') {
-        console.log('No text extracted from PDF. Attempting OCR...');
-  
-        // Conversion du PDF en images
-        const options = {
-          format: 'jpeg',
-          out_dir: path.dirname(pdfPath),
-          out_prefix: path.basename(pdfPath, path.extname(pdfPath)),
-          page: null,
-        };
-  
-        const result = await Poppler.convert(pdfPath, options);
-  
-        let ocrResults = '';
-  
-        for (let i = 0; i < result.length; i++) {
-          const imagePath = result[i];
-          const ocrResult = await Tesseract.recognize(
-            imagePath,
-            'eng',
-            {
-              logger: m => console.log(m),
-            }
-          );
-  
-          ocrResults += ocrResult.data.text;
-          fs.unlinkSync(imagePath); // Supprime l'image après OCR
-        }
-  
-        fs.unlinkSync(pdfPath); // Supprime le PDF après conversion
-  
-        if (ocrResults.trim() === '') {
-          return res.status(400).send('No text extracted from PDF. Ensure the PDF contains selectable text or try with OCR.');
-        }
-  
-        res.send(ocrResults);
-      } else {
-        res.send(data.text);
-      }
-    } catch (err) {
-      fs.unlinkSync(pdfPath); // Supprime le PDF en cas d'erreur
-      console.error('Error parsing PDF:', err);
-      res.status(500).send(err.message);
+        console.log('Uploaded file path:', pdfPath);  // Log the file path
+        const dataBuffer = fs.readFileSync(pdfPath);
+        const data = await pdfParse(dataBuffer);
+
+        // Extraire le texte des pages 2 et 3
+        const pages = data.text.split('\n\n\n');
+        const page2Text = pages[1] ? pages[1].trim() : '';
+        const page3Text = pages[2] ? pages[2].trim() : '';
+        const extractedText = `Page 2:\n${page2Text}\n\nPage 3:\n${page3Text}`;
+
+        console.log('Extracted text:', extractedText);  // Log the extracted text
+
+        // Envoyer le texte extrait au client
+        res.json({ text: extractedText });
+    } catch (error) {
+        console.error('Error parsing PDF:', error);
+        res.status(500).send('Error parsing PDF');
+    } finally {
+        // Supprimer le fichier téléchargé
+        fs.unlinkSync(pdfPath);
     }
-  });
+});
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

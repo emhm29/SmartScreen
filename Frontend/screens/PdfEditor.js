@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, Button, TextInput, ScrollView, StyleSheet, Alert, Platform } from 'react-native';
+import { ScrollView, Text, Button, StyleSheet, Alert, View, Dimensions } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
+import { WebView } from 'react-native-webview';
 
 const PdfEditor = () => {
-  const [pdfContent, setPdfContent] = useState('');
-  const [editedContent, setEditedContent] = useState('');
-  const [pdfUri, setPdfUri] = useState(null);
+  const [pdfBase64, setPdfBase64] = useState(null);
 
   const handleUploadPDF = async () => {
     try {
@@ -14,61 +13,60 @@ const PdfEditor = () => {
         type: 'application/pdf',
       });
 
-      if (!result.canceled) {
-        const { uri } = result.assets[0];
-        const pdfContentBase64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
-        setPdfContent(pdfContentBase64);
-        setEditedContent(pdfContentBase64);
-        setPdfUri(uri);
+      console.log('DocumentPicker Result:', result);
+
+      if (!result.canceled && result.assets && result.assets.length > 0) {
+        const uri = result.assets[0].uri;
+        console.log('URI:', uri); // Debugging
+
+        // Ensure the URI is valid
+        if (!uri) {
+          throw new Error('Invalid URI');
+        }
+
+        const fileData = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
+        const base64Uri = `data:application/pdf;base64,${fileData}`;
+        setPdfBase64(base64Uri);
+
         Alert.alert('PDF Uploaded', `PDF has been uploaded from: ${uri}`);
+      } else {
+        console.error('Invalid result or URI');
+        Alert.alert('Error', 'Invalid result or URI');
       }
     } catch (err) {
+      console.error('Error:', err); // Display full error in console
       Alert.alert('Error', 'Failed to upload PDF. Please try again later.');
     }
   };
 
   const handleDownloadPDF = async () => {
-    if (pdfUri) {
+    if (pdfBase64) {
       try {
-        if (Platform.OS === 'android') {
-          const permissions = await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
-          if (permissions.granted) {
-            const base64Data = await FileSystem.readAsStringAsync(pdfUri, { encoding: FileSystem.EncodingType.Base64 });
-            const newUri = await FileSystem.StorageAccessFramework.createFileAsync(
-              permissions.directoryUri,
-              'DownloadedPDF.pdf',
-              'application/pdf'
-            );
-            await FileSystem.writeAsStringAsync(newUri, base64Data, { encoding: FileSystem.EncodingType.Base64 });
-            Alert.alert('PDF Downloaded', `PDF has been downloaded to ${newUri}`);
-          } else {
-            Alert.alert('Permission Denied', 'Unable to access storage.');
-          }
-        } else {
-          Alert.alert('PDF Downloaded', `PDF has been saved to ${pdfUri}`);
-        }
+        const fileUri = `${FileSystem.documentDirectory}DownloadedPDF.pdf`;
+        const base64Data = pdfBase64.split('base64,')[1]; // Extract base64 content
+        await FileSystem.writeAsStringAsync(fileUri, base64Data, { encoding: FileSystem.EncodingType.Base64 });
+        Alert.alert('PDF Downloaded', `PDF has been saved to ${fileUri}`);
       } catch (error) {
         console.error('Error downloading PDF:', error);
+        Alert.alert('Error', 'Failed to download PDF. Please try again later.');
       }
     }
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Button title="Upload PDF" onPress={handleUploadPDF} />
-      {pdfContent ? (
-        <>
-          <Text style={styles.label}>PDF Content:</Text>
-          <TextInput
-            style={styles.textInput}
-            multiline
-            value={editedContent}
-            onChangeText={setEditedContent}
+      <Button title="UPLOAD PDF" onPress={handleUploadPDF} color="#0288D1" />
+      {pdfBase64 ? (
+        <View style={styles.pdfContainer}>
+          <WebView
+            originWhitelist={['*']}
+            source={{ uri: pdfBase64 }}
+            style={styles.pdf}
           />
-          <Button title="Download Edited PDF" onPress={handleDownloadPDF} />
-        </>
+          <Button title="DOWNLOAD EDITED PDF" onPress={handleDownloadPDF} color="#0288D1" />
+        </View>
       ) : (
-        <Text>No PDF uploaded</Text>
+        <Text style={styles.noPdfText}>No PDF uploaded</Text>
       )}
     </ScrollView>
   );
@@ -82,18 +80,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#E0F7FA',
   },
-  label: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginVertical: 8,
+  pdfContainer: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height - 200,
+    marginTop: 20,
   },
-  textInput: {
-    width: '100%',
-    height: 200,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    padding: 8,
-    marginVertical: 8,
+  pdf: {
+    flex: 1,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height - 200,
+  },
+  noPdfText: {
+    fontSize: 16,
+    color: '#757575',
   },
 });
 

@@ -9,7 +9,7 @@ const ManageComplaints = () => {
     useEffect(() => {
         const fetchClaims = async () => {
             try {
-                const response = await axios.get('http://192.168.1.8:3000/claims');
+                const response = await axios.get('http://192.168.1.3:3000/claims');
                 setClaims(response.data);
             } catch (error) {
                 console.error('Error fetching claims:', error);

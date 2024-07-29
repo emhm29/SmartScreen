@@ -9,7 +9,7 @@ const ForgotPassword = ({ navigation }) => {
 
   const handleForgotPassword = async () => {
     try {
-      const response = await axios.post('http://192.168.1.8:3000/forgot-password', { email });
+      const response = await axios.post('http://192.168.1.3:3000/forgot-password', { email });
       Alert.alert('Success', `Reset token generated: ${response.data.token}`);
       setToken(response.data.token); // Store the token for later use
     } catch (error) {

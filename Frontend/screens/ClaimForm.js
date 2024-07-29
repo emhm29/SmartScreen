@@ -13,7 +13,7 @@ const ClaimForm = ({ navigation }) => {
   const [imageUrl, setImageUrl] = useState(route.params?.imageUrl || '');
 
   const handleSubmit = () => {
-    axios.post('http://192.168.1.8:3000/claims', {
+    axios.post('http://192.168.1.3:3000/claims', {
       name,
       email,
       description,

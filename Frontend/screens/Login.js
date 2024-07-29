@@ -12,7 +12,7 @@ const Login = ({ navigation }) => {
 
   const handleLogin = async () => {
     try {
-        const response = await axios.post('http://192.168.1.8:3000/login', { email, password });
+        const response = await axios.post('http://192.168.1.3:3000/login', { email, password });
         const { token, id, role } = response.data; // Ensure `id` and `role` are destructured from the response
         console.log('Received token from backend:', token);
         await login(token);

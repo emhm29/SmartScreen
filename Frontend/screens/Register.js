@@ -10,7 +10,7 @@ const Register = ({ navigation }) => {
 
   const handleRegister = async () => {
     try {
-      const response = await axios.post('http://192.168.1.8:3000/register', { email, password, role });
+      const response = await axios.post('http://192.168.1.3:3000/register', { email, password, role });
       alert('Inscription réussie');
       navigation.navigate('Login'); // Naviguer vers la page de connexion après inscription
     } catch (error) {

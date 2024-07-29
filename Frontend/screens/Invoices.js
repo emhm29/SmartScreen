@@ -29,7 +29,7 @@ const Invoices = () => {
 
   const fetchInvoices = async () => {
     try {
-      const response = await axios.get('http://192.168.1.8:3000/invoices', {
+      const response = await axios.get('http://192.168.1.3:3000/invoices', {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -66,7 +66,7 @@ const Invoices = () => {
         throw new Error('Token not found');
       }
 
-      const response = await axios.put(`http://192.168.1.8:3000/invoices/${editInvoice.id}`, invoiceForm, {
+      const response = await axios.put(`http://192.168.1.3:3000/invoices/${editInvoice.id}`, invoiceForm, {
         headers: {
           Authorization: `Bearer ${token}`
         }

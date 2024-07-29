@@ -10,7 +10,7 @@ const ResetPassword = ({ route, navigation }) => {
   const handleResetPassword = async () => {
     try {
       console.log('Sending reset password request to server with token:', token); // Log des données envoyées
-      const response = await axios.post(`http://192.168.1.8:3000/reset-password/${token}`, { password });
+      const response = await axios.post(`http://192.168.1.3:3000/reset-password/${token}`, { password });
       console.log('Response from server:', response.data); // Log de la réponse du serveur
       Alert.alert('Success', 'Password updated successfully');
       navigation.navigate('Login');

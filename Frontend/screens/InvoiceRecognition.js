@@ -127,7 +127,7 @@ const InvoiceRecognition = () => {
   };
 
   const sendDataToBackend = async (data) => {
-    const url = 'http://192.168.1.8:3000/invoices'; // Update this with your local IP
+    const url = 'http://192.168.1.3:3000/invoices'; // Update this with your local IP
 
     try {
         console.log('Sending data to backend:', data); // Log the data being sent

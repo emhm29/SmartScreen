@@ -8,13 +8,27 @@ const pool = mysql.createPool({
   database: 'smartscreen'
 });
 
-const createClaim = async (name, email, description, imageUrl) => {
+// Create Claim Endpoint
+app.post('/claims', async (req, res) => {
+  const { name, email, description, imageUrl } = req.body;
+
+  try {
     const [result] = await pool.query(
       'INSERT INTO claims (name, email, description, imageUrl) VALUES (?, ?, ?, ?)',
       [name, email, description, imageUrl]
     );
-    return { id: result.insertId, name, email, description, imageUrl, created_at: new Date() };
-  };
+    
+    res.status(201).json({ id: result.insertId, name, email, description, imageUrl, created_at: new Date() });
+  } catch (error) {
+    console.error('Error inserting claim:', error);
+    res.status(500).json({ error: 'An error occurred while creating the claim.' });
+  }
+});
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
+});
 
 const findClaimById = async (id) => {
   const [rows] = await pool.query(

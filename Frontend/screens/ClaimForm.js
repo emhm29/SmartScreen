@@ -22,18 +22,20 @@ const ClaimForm = ({ navigation }) => {
     .then(response => {
       if (response.status === 201) {
         Alert.alert('Réclamation Soumise', `Merci, ${name}. Votre réclamation a été enregistrée.`);
-        // Optionally reset the form
         setName('');
         setEmail('');
         setDescription('');
         setImageUrl('');
-        setIsClaimed(true);
-        navigation.navigate('pdfScanner', { claimed: true });
+        navigation.navigate('PdfScanner');
       } else {
         Alert.alert('Erreur', 'Une erreur est survenue lors de la soumission de votre réclamation.');
       }
+    })
+    .catch(error => {
+      Alert.alert('Erreur', 'Une erreur est survenue lors de la soumission de votre réclamation.');
+      console.error(error);
     });
-  };
+};
 
   return (
     <View style={styles.container}>

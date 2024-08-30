@@ -198,7 +198,33 @@ app.post('/invoices', (req, res) => {
             });
     });
 });
+// Route pour créer une réclamation
+app.post('/claims', (req, res) => {
+    const { name, email, description, imageUrl } = req.body;
 
+    if (!name || !email || !description || !imageUrl) {
+        return res.status(400).json({ error: 'Tous les champs sont requis.' });
+    }
+
+    connection.query(
+        'INSERT INTO claims (name, email, description, imageUrl) VALUES (?, ?, ?, ?)',
+        [name, email, description, imageUrl],
+        (err, result) => {
+            if (err) {
+                console.error('Error inserting claim:', err);
+                return res.status(500).json({ error: 'An error occurred while creating the claim.' });
+            }
+            res.status(201).json({
+                id: result.insertId,
+                name,
+                email,
+                description,
+                imageUrl,
+                created_at: new Date()
+            });
+        }
+    );
+});
 // Route pour récupérer les factures
 app.get('/invoices', authMiddleware, (req, res) => {
     connection.query('SELECT * FROM invoices', (err, results) => {

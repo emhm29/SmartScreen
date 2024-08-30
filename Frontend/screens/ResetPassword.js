@@ -9,16 +9,19 @@ const ResetPassword = ({ route, navigation }) => {
 
   const handleResetPassword = async () => {
     try {
-      console.log('Sending reset password request to server with token:', token); // Log des données envoyées
-      const response = await axios.post(`http://192.168.1.8:3000/reset-password/${token}`, { password });
-      console.log('Response from server:', response.data); // Log de la réponse du serveur
-      Alert.alert('Success', 'Password updated successfully');
-      navigation.navigate('Login');
+        console.log('Sending reset password request to server with token:', token); // Log the token
+        const response = await axios.post(`http://192.168.1.8:3000/reset-password/${token}`, {
+            password: password // Ensure this is not an empty string
+        });
+        console.log('Response from server:', response.data);
+        Alert.alert('Success', 'Password updated successfully');
+        navigation.navigate('Login');
     } catch (error) {
-      console.error('Error resetting password:', error);
-      Alert.alert('Error', error.response ? error.response.data.message : error.message);
+        console.error('Full error response:', error.response ? error.response.data : error.message);
+        Alert.alert('Error', error.response ? error.response.data.message : error.message);
     }
-  };
+};
+
 
   return (
     <View style={styles.container}>

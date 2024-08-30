@@ -13,7 +13,7 @@ const { PDFDocument } = require('pdf-lib');
 const multer = require('multer'); // Ajoutez cette ligne pour importer multer
 const { createUser, findUserByEmail, updateUser, deleteUser, getClaims } = require('./user');
 const pdfParse = require('pdf-parse');
-
+const router = express.Router();
 const app = express();
 app.use(cors());
 app.use(bodyParser.json({ limit: '50mb' }));
@@ -329,7 +329,81 @@ app.post('/upload', upload.single('pdf'), async (req, res) => {
     }
 });
 
+app.post('/forgot-password', (req, res) => {
+    const { email } = req.body;
+    if (!email) {
+        return res.status(400).json({ error: 'Email is required.' });
+    }
+    connection.query(
+        'SELECT * FROM users WHERE email = ?',
+        [email],
+        (err, results) => {
+            if (err) {
+                console.error('Error querying users:', err);
+                return res.status(500).json({ error: 'An error occurred while verifying the email.' });
+            }
+            if (results.length === 0) {
+                return res.status(404).json({ error: 'Email not found.' });
+            }
+            const token = generateResetToken(); // Implement this function to generate a secure token
+            res.status(200).json({ token });
+        }
+    );
+});
 
+function generateResetToken() {
+    return Math.random().toString(36).substring(2); // Replace with a secure token generation method in production
+}
+
+router.post('/reset-password/:token', (req, res) => {
+    const { token } = req.params;
+    const { password } = req.body;
+
+    if (!password) {
+        return res.status(400).json({ message: 'Password is required.' });
+    }
+
+    // Example logic to find user by token and update the password
+    connection.query(
+        'SELECT * FROM users WHERE reset_token = ? AND reset_token_expires > ?',
+        [token, Date.now()],
+        (err, results) => {
+            if (err) {
+                console.error('Error querying users:', err);
+                return res.status(500).json({ error: 'An error occurred.' });
+            }
+            if (results.length === 0) {
+                return res.status(400).json({ error: 'Invalid or expired token.' });
+            }
+
+            const user = results[0];
+            const hashedPassword = bcrypt.hashSync(password, 10);
+
+            connection.query(
+                'UPDATE users SET password = ?, reset_token = NULL, reset_token_expires = NULL WHERE id = ?',
+                [hashedPassword, user.id],
+                (updateErr) => {
+                    if (updateErr) {
+                        console.error('Error updating password:', updateErr);
+                        return res.status(500).json({ error: 'An error occurred while updating the password.' });
+                    }
+                    res.status(200).json({ message: 'Password updated successfully.' });
+                }
+            );
+        }
+    );
+});
+app.post('/reset-password/:token', (req, res) => {
+    const { token } = req.params;
+    const { password } = req.body;
+
+    if (!password) {
+        return res.status(400).json({ message: 'Password is required.' });
+    }
+
+    // Implement your logic to handle the password reset here
+    res.status(200).json({ message: 'Password updated successfully.' });
+});
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

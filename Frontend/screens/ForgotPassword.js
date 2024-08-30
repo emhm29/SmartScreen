@@ -11,16 +11,19 @@ const ForgotPassword = ({ navigation }) => {
   const handleForgotPassword = async () => {
     try {
       const response = await axios.post('http://192.168.1.8:3000/forgot-password', { email });
-      Alert.alert('Success', `Reset token generated: ${response.data.token}`);
-      setToken(response.data.token); // Store the token for later use
+      
+      // Store the token received from the server
+      const resetToken = response.data.token;
+      setToken(resetToken);
+
+      Alert.alert('Success', `Reset token generated: ${resetToken}`);
+
+      // Navigate to the ResetPassword screen and pass the token as a parameter
+      navigation.navigate('ResetPassword', { token: resetToken });
     } catch (error) {
       console.error('Error generating reset token:', error);
       Alert.alert('Error', error.response ? error.response.data.message : error.message);
     }
-  };
-
-  const handleNavigateToResetPassword = () => {
-    navigation.navigate('ResetPassword', { token });
   };
 
   return (

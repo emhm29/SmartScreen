@@ -35,11 +35,13 @@ const Login = ({ navigation }) => {
         navigation.navigate('AdminInterface');
       }
     } catch (error) {
-      // Only show alert and avoid logging to console
       Alert.alert('Login Error', error.response ? error.response.data.error : 'An unexpected error occurred');
+    } finally {
+      // Clear input fields regardless of success or error
+      setEmail('');
+      setPassword('');
     }
   };
-
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.registerButton} onPress={() => navigation.navigate('Register')}>

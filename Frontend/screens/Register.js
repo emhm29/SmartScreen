@@ -7,16 +7,17 @@ import { FontAwesome } from '@expo/vector-icons';
 const Register = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('user'); // État initial pour le rôle
+  const [role, setRole] = useState('user'); // Initial state for role
 
   const handleRegister = async () => {
     try {
       const response = await axios.post('http://192.168.1.8:3000/register', { email, password, role });
       alert('Inscription réussie');
-      navigation.navigate('Login'); // Naviguer vers la page de connexion après inscription
+      navigation.navigate('Login'); // Navigate to login page after registration
     } catch (error) {
-      console.error('Error registering:', error.response ? error.response.data : error.message);
-      Alert.alert('Registration Error', error.response ? error.response.data.message : error.message);
+      const errorMessage = error.response ? error.response.data.error : error.message;
+      const alertMessage = `${errorMessage}\n\nVeuillez réessayer.`; // Removed "Détails de l'erreur"
+      Alert.alert('Erreur d\'inscription', alertMessage, [{ text: 'OK' }]);
     }
   };
 

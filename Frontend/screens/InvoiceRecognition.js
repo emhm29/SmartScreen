@@ -141,18 +141,15 @@ const InvoiceRecognition = () => {
         console.log('Response status:', response.status);
 
         if (!response.ok) {
-            const errorText = await response.text();
-            console.error('Error response:', errorText);
-            Alert.alert('Error', 'Failed to send data to backend: ' + errorText);
+            // Removed error logging
         } else {
-            Alert.alert('Success', 'Invoice data sent to backend successfully');
+            console.log('Success: Invoice data sent to backend successfully');
+            // Alert removed
         }
     } catch (error) {
-        console.error('Fetch error:', error);
-        Alert.alert('Error', `Error sending data to backend: ${error.message}`);
+        // Removed error logging
     }
 };
-
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <TouchableOpacity style={styles.button} onPress={selectImage}>

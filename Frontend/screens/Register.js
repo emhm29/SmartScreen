@@ -7,20 +7,38 @@ import { FontAwesome } from '@expo/vector-icons';
 const Register = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('user'); // Initial state for role
+  const [role, setRole] = useState('user');
+
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
 
   const handleRegister = async () => {
+    if (!validateEmail(email)) {
+      Alert.alert('Erreur', 'Veuillez entrer une adresse e-mail valide.');
+      return;
+    }
+
+    if (password.length < 6) {
+      Alert.alert('Erreur', 'Le mot de passe doit comporter au moins 6 caractères.');
+      return;
+    }
+
     try {
       const response = await axios.post('http://192.168.1.8:3000/register', { email, password, role });
       alert('Inscription réussie');
-      navigation.navigate('Login'); // Navigate to login page after registration
+      navigation.navigate('Login');
     } catch (error) {
       const errorMessage = error.response ? error.response.data.error : error.message;
-      const alertMessage = `${errorMessage}\n\nVeuillez réessayer.`; // Removed "Détails de l'erreur"
+      const alertMessage = `${errorMessage}\n\nVeuillez réessayer.`;
       Alert.alert('Erreur d\'inscription', alertMessage, [{ text: 'OK' }]);
+    } finally {
+      setEmail('');
+      setPassword('');
+      setRole('user');
     }
   };
-
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -143,14 +161,14 @@ const styles = StyleSheet.create({
   },
   roleButton: {
     padding: 10,
-    borderWidth: 1,
-    borderColor: 'gray',
+    borderWidth: 2, // Assurez-vous que la largeur de la bordure correspond à la propriété borderWidth
+    borderColor: 'transparent', // Utilisez 'transparent' pour une bordure transparente
     borderRadius: 5,
     backgroundColor: '#ddd',
   },
   selectedRoleButton: {
-    backgroundColor: '#007BFF',
-    borderColor: '#007BFF',
+    backgroundColor: '#77CAEE',
+    borderColor: '#77CAEE',
   },
   roleButtonText: {
     fontSize: 16,

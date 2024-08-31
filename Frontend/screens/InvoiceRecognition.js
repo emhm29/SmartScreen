@@ -138,8 +138,6 @@ const InvoiceRecognition = () => {
             },
             body: JSON.stringify(data),
         });
-
-        // Log the response status
         console.log('Response status:', response.status);
 
         if (!response.ok) {

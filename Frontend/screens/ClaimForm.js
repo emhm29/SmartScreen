@@ -1,4 +1,4 @@
-// screens/ClaimForm.js
+
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import axios from 'axios';
@@ -9,7 +9,7 @@ const ClaimForm = ({ navigation }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [description, setDescription] = useState('');
-  const [isClaimed, setIsClaimed] = useState(false); // Add this line
+  const [isClaimed, setIsClaimed] = useState(false);
   const [imageUrl, setImageUrl] = useState(route.params?.imageUrl || '');
 
   const handleSubmit = () => {
@@ -83,7 +83,7 @@ const ClaimForm = ({ navigation }) => {
       <Button
         title="Soumettre la réclamation"
         onPress={handleSubmit}
-        color={isClaimed ? '#F43B3B' : '#77CAEE'} // Change color based on claim state
+        color={isClaimed ? '#F43B3B' : '#77CAEE'}
       />
     </View>
     </View>

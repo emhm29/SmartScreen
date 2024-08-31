@@ -27,11 +27,16 @@ const ForgotPassword = ({ navigation }) => {
       setEmail('');
       navigation.navigate('ResetPassword', { token: resetToken });
     } catch (error) {
-      const errorMessage = error.response?.data?.message || error.message || 'Une erreur inconnue est survenue.';
-      Alert.alert('Erreur', errorMessage);
+      if (error.response) {
+        const errorMessage = error.response.status === 404
+          ? 'Cette adresse e-mail introuvable.'
+          : error.response.data?.message || 'Une erreur inconnue est survenue.';
+        Alert.alert('Erreur', errorMessage);
+      } else {
+        Alert.alert('Erreur', 'Une erreur inconnue est survenue.');
+      }
     }
   };
-
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('Login')}>

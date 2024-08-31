@@ -15,7 +15,7 @@ const Login = ({ navigation }) => {
     try {
       const response = await axios.post('http://192.168.1.8:3000/login', { email, password });
       const { token, id, role } = response.data;
-      console.log('Received token from backend:', token);
+
       await login(token);
       Alert.alert('Succès', 'Connexion réussie');
 
@@ -35,8 +35,8 @@ const Login = ({ navigation }) => {
         navigation.navigate('AdminInterface');
       }
     } catch (error) {
-      console.error('Error logging in:', error);
-      Alert.alert('Login Error', error.response ? error.response.data.error : error.message);
+      // Only show alert and avoid logging to console
+      Alert.alert('Login Error', error.response ? error.response.data.error : 'An unexpected error occurred');
     }
   };
 

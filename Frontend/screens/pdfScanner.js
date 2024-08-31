@@ -343,7 +343,7 @@ buttonStyle: {
   marginTop: 10,
   paddingVertical: 10,
   paddingHorizontal: 20,
-  backgroundColor: '#003366',
+  backgroundColor: '#77CAEE',
   borderRadius: 5,
   alignItems: 'center',
   width: 200, // Largeur uniforme pour tous les boutons
@@ -351,13 +351,16 @@ buttonStyle: {
 pdfButtonText: {
   color: '#fff',
   fontSize: 16,
+  textAlign: 'center',
 },
 claimButtonText: {
   color: '#fff',
+  textAlign: 'center',
   fontSize: 16,
 },
 recognitionText: {
   color: '#fff',
+  textAlign: 'center',
   fontSize: 16,
 },
 });

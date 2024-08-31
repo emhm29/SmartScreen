@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         marginTop: height * 0.03,
-        backgroundColor: "#003366",
+        backgroundColor: "#77CAEE",
         borderRadius: 20,
         width: 200,
         height: 40,
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
         color: "white",
     },
     c: {
-        marginRight: 50
+        marginRight: 50,
     }
 });
 

@@ -25,10 +25,17 @@ const ImageUploadTwo = ({ changeImage }) => {
       aspect: [9, 16],
       quality: 1,
     });
-
+  
     if (!result.cancelled) {
-      setUploading(true)
-      uploadToCloudinary(result.assets[0].uri)
+      setUploading(true);
+      try {
+        await uploadToCloudinary(result.assets[0].uri);
+        alert('Image uploaded successfully!');
+      } catch {
+        alert('Failed to upload image. Please try again.');
+      } finally {
+        setUploading(false);
+      }
     }
   };
 
@@ -39,10 +46,17 @@ const ImageUploadTwo = ({ changeImage }) => {
       aspect: [1, 1],
       quality: 1,
     });
-
+  
     if (!result.cancelled) {
-      setUploading(true)
-      uploadToCloudinary(result.assets[0].uri)
+      setUploading(true);
+      try {
+        await uploadToCloudinary(result.assets[0].uri);
+        alert('Image uploaded successfully!');
+      } catch {
+        alert('Failed to upload image. Please try again.');
+      } finally {
+        setUploading(false);
+      }
     }
   };
 

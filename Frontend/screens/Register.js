@@ -14,20 +14,26 @@ const Register = ({ navigation }) => {
     return re.test(String(email).toLowerCase());
   };
 
+  const validatePassword = (password) => {
+    // Updated validation: at least 8 characters, one uppercase, one lowercase, one number, and one special character
+    const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+    return re.test(password);
+  };
+
   const handleRegister = async () => {
     if (!validateEmail(email)) {
       Alert.alert('Erreur', 'Veuillez entrer une adresse e-mail valide.');
       return;
     }
 
-    if (password.length < 6) {
-      Alert.alert('Erreur', 'Le mot de passe doit comporter au moins 6 caractères.');
+    if (!validatePassword(password)) {
+      Alert.alert('Erreur', 'Le mot de passe doit comporter au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.');
       return;
     }
 
     try {
       const response = await axios.post('http://192.168.1.8:3000/register', { email, password, role });
-      alert('Inscription réussie');
+      Alert.alert('Succès', 'Inscription réussie');
       navigation.navigate('Login');
     } catch (error) {
       const errorMessage = error.response ? error.response.data.error : error.message;

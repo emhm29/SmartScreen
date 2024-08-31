@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert,TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { Image } from "expo-image";
 
@@ -7,21 +7,29 @@ const ResetPassword = ({ route, navigation }) => {
   const [token, setToken] = useState(route.params?.token || '');
   const [password, setPassword] = useState('');
 
-  const handleResetPassword = async () => {
-    try {
-        console.log('Sending reset password request to server with token:', token); // Log the token
-        const response = await axios.post(`http://192.168.1.8:3000/reset-password/${token}`, {
-            password: password // Ensure this is not an empty string
-        });
-        console.log('Response from server:', response.data);
-        Alert.alert('Success', 'Password updated successfully');
-        navigation.navigate('Login');
-    } catch (error) {
-        console.error('Full error response:', error.response ? error.response.data : error.message);
-        Alert.alert('Error', error.response ? error.response.data.message : error.message);
-    }
-};
+  const validatePassword = (password) => {
+    // Updated validation: at least 8 characters, one uppercase, one lowercase, one number, and one special character
+    const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+    return re.test(password);
+  };
 
+  const handleResetPassword = async () => {
+    if (!validatePassword(password)) {
+      Alert.alert('Erreur', 'Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.');
+      return;
+    }
+
+    try {
+      const response = await axios.post(`http://192.168.1.8:3000/reset-password/${token}`, {
+        password // Ensure this is not an empty string
+      });
+      Alert.alert('Success', 'Password updated successfully');
+      navigation.navigate('Login');
+    } catch (error) {
+      const errorMessage = error.response ? error.response.data.message : error.message;
+      Alert.alert('Error', errorMessage);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -43,8 +51,12 @@ const ResetPassword = ({ route, navigation }) => {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Button title="Reset Password" onPress={handleResetPassword} />
-      <Button title="Back to Login" onPress={() => navigation.navigate('Login')} />
+      <TouchableOpacity style={styles.button} onPress={handleResetPassword}>
+        <Text style={styles.buttonText}>Reset Password</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
+        <Text style={styles.buttonText}>Back to Login</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -73,6 +85,19 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 12,
     paddingHorizontal: 8,
+  },
+  button: {
+    backgroundColor: '#77CAEE',
+    padding: 10,
+    borderRadius: 10,
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginTop: 10,
+    width: '50%',
+  },
+  buttonText: {
+    color: '#FFFFFF',  // White text
+    fontSize: 16,
   },
 });
 

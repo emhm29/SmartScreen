@@ -8,21 +8,34 @@ const ForgotPassword = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [token, setToken] = useState('');
 
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
+
   const handleForgotPassword = async () => {
+    if (!validateEmail(email)) {
+      Alert.alert('Erreur', 'Veuillez entrer une adresse e-mail valide.');
+      return;
+    }
+  
     try {
       const response = await axios.post('http://192.168.1.8:3000/forgot-password', { email });
-      
+  
       // Store the token received from the server
       const resetToken = response.data.token;
       setToken(resetToken);
-
+  
       Alert.alert('Success', `Reset token generated: ${resetToken}`);
-
+  
+      // Clear the email input field
+      setEmail('');
+  
       // Navigate to the ResetPassword screen and pass the token as a parameter
       navigation.navigate('ResetPassword', { token: resetToken });
     } catch (error) {
-      console.error('Error generating reset token:', error);
-      Alert.alert('Error', error.response ? error.response.data.message : error.message);
+      const errorMessage = error.response?.data?.message || error.message || 'Une erreur inconnue est survenue.';
+      Alert.alert('Erreur', errorMessage);
     }
   };
 

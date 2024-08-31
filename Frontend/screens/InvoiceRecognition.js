@@ -141,13 +141,10 @@ const InvoiceRecognition = () => {
         console.log('Response status:', response.status);
 
         if (!response.ok) {
-            // Removed error logging
         } else {
             console.log('Success: Invoice data sent to backend successfully');
-            // Alert removed
         }
     } catch (error) {
-        // Removed error logging
     }
 };
   return (

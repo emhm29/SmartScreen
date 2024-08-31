@@ -8,7 +8,6 @@ const ResetPassword = ({ route, navigation }) => {
   const [password, setPassword] = useState('');
 
   const validatePassword = (password) => {
-    // Updated validation: at least 8 characters, one uppercase, one lowercase, one number, and one special character
     const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
     return re.test(password);
   };
@@ -21,7 +20,7 @@ const ResetPassword = ({ route, navigation }) => {
 
     try {
       const response = await axios.post(`http://192.168.1.8:3000/reset-password/${token}`, {
-        password // Ensure this is not an empty string
+        password
       });
       Alert.alert('Success', 'Password updated successfully');
       navigation.navigate('Login');
@@ -34,7 +33,7 @@ const ResetPassword = ({ route, navigation }) => {
   return (
     <View style={styles.container}>
       <Image
-        source={require('../assets/companyLogo.png')} // Replace with your image URL
+        source={require('../assets/companyLogo.png')}
         style={styles.logo}
       />
       <Text style={styles.title}>Reset Password</Text>
@@ -96,7 +95,7 @@ const styles = StyleSheet.create({
     width: '50%',
   },
   buttonText: {
-    color: '#FFFFFF',  // White text
+    color: '#FFFFFF',
     fontSize: 16,
   },
 });

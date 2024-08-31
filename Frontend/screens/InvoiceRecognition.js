@@ -26,7 +26,7 @@ const InvoiceRecognition = () => {
       quality: 1,
     });
 
-    console.log('ImagePicker result:', result); // Log the result of the image picker
+    console.log('ImagePicker result:', result); 
 
     if (!result.canceled) {
       const { uri, mimeType, fileName } = result.assets[0];
@@ -40,13 +40,13 @@ const InvoiceRecognition = () => {
       let formData = new FormData();
       formData.append('file', {
         uri: uri,
-        type: mimeType, // Use the correct file type
-        name: fileName, // Use the correct file name
+        type: mimeType, 
+        name: fileName, 
       });
       formData.append('apikey', OCR_API_KEY);
       formData.append('language', 'eng');
 
-      console.log('FormData:', formData._parts); // Log FormData parts
+      console.log('FormData:', formData._parts);
 
       const response = await fetch('https://api.ocr.space/parse/image', {
         method: 'POST',
@@ -57,7 +57,7 @@ const InvoiceRecognition = () => {
         },
       });
 
-      console.log('Response status:', response.status); // Log response status
+      console.log('Response status:', response.status); 
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -66,7 +66,7 @@ const InvoiceRecognition = () => {
       }
 
       const result = await response.json();
-      console.log('OCR Result:', result); // Log result
+      console.log('OCR Result:', result); 
 
       const text = result.ParsedResults[0].ParsedText;
       setRecognizedText(text);
@@ -78,7 +78,6 @@ const InvoiceRecognition = () => {
   };
 
   const parseInvoiceData = (text) => {
-    // Setting the extracted data directly
     const invoiceData = {
       vendor: 'Mon Entreprise, 22, Avenue Voltaire, 13000 Marseille',
       client: 'Michel Acheteur, 31, rue de la Forêt, 13100 Aix-en-Provence',
@@ -127,10 +126,10 @@ const InvoiceRecognition = () => {
   };
 
   const sendDataToBackend = async (data) => {
-    const url = 'http://192.168.1.8:3000/invoices'; // Update this with your local IP
+    const url = 'http://192.168.1.8:3000/invoices'; 
 
     try {
-        console.log('Sending data to backend:', data); // Log the data being sent
+        console.log('Sending data to backend:', data); 
 
         const response = await fetch(url, {
             method: 'POST',

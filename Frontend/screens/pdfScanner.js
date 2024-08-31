@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView, Alert, Dimensions, Modal, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import ImageUploadTwo from './ImageUploadTwo'; // Assurez-vous que ce composant est correctement importé
+import ImageUploadTwo from './ImageUploadTwo'; 
 import * as Print from 'expo-print';
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -106,7 +106,7 @@ const PdfScanner = () => {
   };
 
   const handleChangeImage = (url) => {
-    console.log('Selected image URL:', url); // Debug log
+    console.log('Selected image URL:', url);
     setImageUrl(url);
   };
 
@@ -210,13 +210,13 @@ const styles = StyleSheet.create({
     marginTop: 10,
     paddingVertical: 8,
     paddingHorizontal: 12,
-    backgroundColor: '#A7C957', // Couleur verte pour indiquer une action positive
+    backgroundColor: '#A7C957',
     borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'center',
   },
   claimButtonClaimed: {
-    backgroundColor: 'red', // Couleur rouge pour indiquer une réclamation déjà faite
+    backgroundColor: 'red',
   },
   messageContainer: {
     flex: 1,
@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   postButton: {
-    backgroundColor: '#003366',
+    backgroundColor: '#77CAEE',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
@@ -346,7 +346,7 @@ buttonStyle: {
   backgroundColor: '#77CAEE',
   borderRadius: 5,
   alignItems: 'center',
-  width: 200, // Largeur uniforme pour tous les boutons
+  width: 200,
 },
 pdfButtonText: {
   color: '#fff',

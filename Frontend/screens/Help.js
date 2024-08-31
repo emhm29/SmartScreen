@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { ScrollView, View, Text, StyleSheet, TouchableOpacity,Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook from React Navigation
+import { useNavigation } from '@react-navigation/native'; 
 
 const Help = () => {
   const [selectedOption, setSelectedOption] = useState(true);
-  const navigation = useNavigation(); // Initialize navigation
+  const navigation = useNavigation(); 
 
   const handleOkPress = () => {
     if (selectedOption === 'accept') {

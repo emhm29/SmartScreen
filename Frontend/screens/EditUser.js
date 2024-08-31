@@ -7,7 +7,6 @@ const EditUser = ({ navigation }) => {
     const [newPassword, setNewPassword] = useState('');
 
     const handleEditUser = () => {
-        // Logique de modification de compte utilisateur ici
         alert('Compte utilisateur modifié!');
         navigation.goBack();
     };
@@ -15,7 +14,7 @@ const EditUser = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <Image
-        source={require('../assets/companyLogo.png')} // Replace with your image URL
+        source={require('../assets/companyLogo.png')} 
         style={styles.logo}
       />
             <Text style={styles.title}>Modifier un compte utilisateur</Text>

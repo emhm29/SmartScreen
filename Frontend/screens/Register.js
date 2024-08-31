@@ -15,7 +15,6 @@ const Register = ({ navigation }) => {
   };
 
   const validatePassword = (password) => {
-    // Updated validation: at least 8 characters, one uppercase, one lowercase, one number, and one special character
     const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
     return re.test(password);
   };
@@ -57,7 +56,7 @@ const Register = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <Image
-        source={require('../assets/companyLogo.png')} // Replace with your image URL
+        source={require('../assets/companyLogo.png')}
         style={styles.logo}
       />
       <Text style={styles.title}>Register</Text>
@@ -167,8 +166,8 @@ const styles = StyleSheet.create({
   },
   roleButton: {
     padding: 10,
-    borderWidth: 2, // Assurez-vous que la largeur de la bordure correspond à la propriété borderWidth
-    borderColor: 'transparent', // Utilisez 'transparent' pour une bordure transparente
+    borderWidth: 2,
+    borderColor: 'transparent',
     borderRadius: 5,
     backgroundColor: '#ddd',
   },

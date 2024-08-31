@@ -17,9 +17,8 @@ const PdfEditor = () => {
 
       if (!result.canceled && result.assets && result.assets.length > 0) {
         const uri = result.assets[0].uri;
-        console.log('URI:', uri); // Debugging
+        console.log('URI:', uri); 
 
-        // Ensure the URI is valid
         if (!uri) {
           throw new Error('Invalid URI');
         }
@@ -34,7 +33,7 @@ const PdfEditor = () => {
         Alert.alert('Error', 'Invalid result or URI');
       }
     } catch (err) {
-      console.error('Error:', err); // Display full error in console
+      console.error('Error:', err); 
       Alert.alert('Error', 'Failed to upload PDF. Please try again later.');
     }
   };
@@ -43,7 +42,7 @@ const PdfEditor = () => {
     if (pdfBase64) {
       try {
         const fileUri = `${FileSystem.documentDirectory}DownloadedPDF.pdf`;
-        const base64Data = pdfBase64.split('base64,')[1]; // Extract base64 content
+        const base64Data = pdfBase64.split('base64,')[1]; 
         await FileSystem.writeAsStringAsync(fileUri, base64Data, { encoding: FileSystem.EncodingType.Base64 });
         Alert.alert('PDF Downloaded', `PDF has been saved to ${fileUri}`);
       } catch (error) {

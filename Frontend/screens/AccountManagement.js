@@ -1,4 +1,4 @@
-// AccountManagement.js
+
 import React from "react";
 import { View, Text, StyleSheet, Button } from "react-native";
 import { Image } from "expo-image";
@@ -6,7 +6,7 @@ const AccountManagement = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <Image
-        source={require('../assets/companyLogo.png')} // Replace with your image URL
+        source={require('../assets/companyLogo.png')} 
         style={styles.logo}
       />
             <Text style={styles.title}>Gestion des Comptes</Text>

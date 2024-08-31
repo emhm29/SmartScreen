@@ -3,7 +3,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, Alert, ScrollView, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import AuthContext from '../AuthContext'; // Assurez-vous que le chemin est correct
+import AuthContext from '../AuthContext'; 
 
 const Invoices = () => {
   const { token } = useContext(AuthContext);
@@ -61,7 +61,7 @@ const Invoices = () => {
 
   const handleUpdateInvoice = async () => {
     try {
-      const token = await AsyncStorage.getItem('userToken'); // Récupérer le token
+      const token = await AsyncStorage.getItem('userToken');
       if (!token) {
         throw new Error('Token not found');
       }
@@ -72,8 +72,8 @@ const Invoices = () => {
         }
       });
       console.log('Invoice updated:', response.data);
-      fetchInvoices(); // Re-fetch invoices to update the state
-      setEditInvoice(null); // Reset edit mode
+      fetchInvoices(); 
+      setEditInvoice(null); 
       Alert.alert('Succès', 'Facture mise à jour avec succès');
     } catch (error) {
       console.error('Error updating invoice:', error);

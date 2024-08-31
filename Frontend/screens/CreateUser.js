@@ -6,7 +6,6 @@ const CreateUser = ({ navigation }) => {
     const [password, setPassword] = useState('');
 
     const handleCreateUser = () => {
-        // Logique de création de compte utilisateur ici
         alert('Compte utilisateur créé!');
         navigation.goBack();
     };
@@ -14,7 +13,7 @@ const CreateUser = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <Image
-        source={require('../assets/companyLogo.png')} // Replace with your image URL
+        source={require('../assets/companyLogo.png')}
         style={styles.logo}
       />
             <Text style={styles.title}>Créer un compte utilisateur</Text>

@@ -1,4 +1,4 @@
-// GlobalStyles.js
+
 export const Color = {
   primary: '#6200ee',
   secondary: '#03dac6',

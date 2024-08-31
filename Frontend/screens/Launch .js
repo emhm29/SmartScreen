@@ -40,32 +40,32 @@ const styles = StyleSheet.create({
         fontFamily: FontFamily.amikoRegular,
     },
     byEmnaHomraniLayout: {
-        width: width * 0.65, // Adjust width relative to screen width
+        width: width * 0.65,
         position: "absolute",
     },
     smartScreen: {
-        top: height * 0.3, // Adjust top relative to screen height
-        left: width * 0.24, // Adjust left relative to screen width
-        fontSize: width * 0.1, // Adjust font size relative to screen width
+        top: height * 0.3, 
+        left: width * 0.24, 
+        fontSize: width * 0.1, 
         color: Color.colorBlack,
-        width: width * 0.6, // Adjust width relative to screen width
-        height: height * 0.1, // Adjust height relative to screen height
+        width: width * 0.6, 
+        height: height * 0.1, 
         position: "absolute",
         textAlign: "left",
         fontFamily: FontFamily.amikoRegular,
     },
     byEmnaHomrani: {
-        top: height * 0.97, // Adjust top relative to screen height
-        left: width * 0.33, // Adjust left relative to screen width
+        top: height * 0.97, 
+        left: width * 0.33, 
         fontSize: FontSize.size_base,
         color: Color.shadesWhite,
         textAlign: "left",
         fontFamily: FontFamily.amikoRegular,
     },
     d65cdf8f27a20fd0ab9be06227bb74Icon: {
-        top: height * 0.35, // Adjust top relative to screen height
-        left: width * 0.15, // Adjust left relative to screen width
-        height: height * 0.2, // Adjust height relative to screen height
+        top: height * 0.35, 
+        left: width * 0.15, 
+        height: height * 0.2, 
     },
     launch: {
         flex: 1,

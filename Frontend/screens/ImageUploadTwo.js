@@ -116,9 +116,9 @@ const styles = StyleSheet.create({
   customButtonCamera: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#0000', // Button background color
+    backgroundColor: '#0000', 
     borderRadius: 10,
-    width: 50, // Adjust button width as needed
+    width: 50, 
     height: 40,
     paddingHorizontal: 10,
     marginLeft: 20
@@ -126,22 +126,22 @@ const styles = StyleSheet.create({
   customButtonFolder: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#0000', // Button background color
+    backgroundColor: '#0000', 
     borderRadius: 30,
-    width: 1, // Adjust button width as needed
+    width: 1, 
     height:1,
     paddingHorizontal: 10
   },
   buttonImage: {
-    width: 50, // Adjust image width as needed
-    height: 50, // Adjust image height as needed
+    width: 50, 
+    height: 50, 
     resizeMode: 'contain',
     marginLeft: -120,
 
   },
   buttonImag: {
-    width: 50, // Adjust image width as needed
-    height: 50, // Adjust image height as needed
+    width: 50, 
+    height: 50, 
     resizeMode: 'contain',
     marginLeft: 20,
   },

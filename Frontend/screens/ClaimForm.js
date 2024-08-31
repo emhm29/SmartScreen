@@ -13,6 +13,21 @@ const ClaimForm = ({ navigation }) => {
   const [imageUrl, setImageUrl] = useState(route.params?.imageUrl || '');
 
   const handleSubmit = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!name.trim()) {
+      Alert.alert('Erreur', 'Veuillez entrer votre nom.');
+      return;
+    }
+  
+    if (!emailRegex.test(email)) {
+      Alert.alert('Erreur', 'Veuillez entrer une adresse email valide.');
+      return;
+    }
+  
+    if (!description.trim()) {
+      Alert.alert('Erreur', 'Veuillez entrer une description.');
+      return;
+    }
     axios.post('http://192.168.1.8:3000/claims', {
       name,
       email,
@@ -35,8 +50,7 @@ const ClaimForm = ({ navigation }) => {
       Alert.alert('Erreur', 'Une erreur est survenue lors de la soumission de votre réclamation.');
       console.error(error);
     });
-};
-
+  };
   return (
     <View style={styles.container}>
         <Text style={styles.title}>Formulaire de Réclamation</Text>
@@ -69,7 +83,7 @@ const ClaimForm = ({ navigation }) => {
       <Button
         title="Soumettre la réclamation"
         onPress={handleSubmit}
-        color={isClaimed ? 'red' : 'blue'} // Change color based on claim state
+        color={isClaimed ? '#F43B3B' : '#77CAEE'} // Change color based on claim state
       />
     </View>
     </View>
@@ -97,10 +111,10 @@ const styles = StyleSheet.create({
     padding: 10
   },
   button: {
-    backgroundColor: 'blue'
+    backgroundColor: '#77CAEE'
   },
   buttonClaimed: {
-    backgroundColor: 'red'
+    backgroundColor: '#F43B3B'
   }
 });
 

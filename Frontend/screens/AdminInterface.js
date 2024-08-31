@@ -1,4 +1,4 @@
-// AdminInterface.js
+
 import React from "react";
 import { View, Text, StyleSheet, Button } from "react-native";
 import { Image } from "expo-image";
@@ -8,7 +8,7 @@ const AdminInterface = ({ navigation }) => {
         <View style={styles.container}>
             
             <Image
-        source={require('../assets/companyLogo.png')} // Replace with your image URL
+        source={require('../assets/companyLogo.png')} 
         style={styles.logo}
       />
             <Button title="Gestion des Comptes" onPress={() => navigation.navigate('AccountManagement')} />

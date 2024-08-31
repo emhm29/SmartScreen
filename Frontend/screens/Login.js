@@ -37,7 +37,6 @@ const Login = ({ navigation }) => {
     } catch (error) {
       Alert.alert('Login Error', error.response ? error.response.data.error : 'An unexpected error occurred');
     } finally {
-      // Clear input fields regardless of success or error
       setEmail('');
       setPassword('');
     }
@@ -89,14 +88,14 @@ const styles = StyleSheet.create({
     top: 40,
     right: 16,
     backgroundColor: '#77CAEE',
-    padding: 8, // Decreased padding
+    padding: 8, 
     borderRadius: 10,
     flexDirection: 'row',
     alignItems: 'center',
   },
   registerButtonText: {
     color: 'white',
-    fontSize: 14, // Decreased font size
+    fontSize: 14,
     marginLeft: 5,
   },
   logo: {

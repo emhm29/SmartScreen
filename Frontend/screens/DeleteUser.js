@@ -5,7 +5,6 @@ const DeleteUser = ({ navigation }) => {
     const [username, setUsername] = useState('');
 
     const handleDeleteUser = () => {
-        // Logique de suppression de compte utilisateur ici
         Alert.alert(
             "Suppression de compte",
             `Êtes-vous sûr de vouloir supprimer le compte utilisateur "${username}"?`,
@@ -28,7 +27,7 @@ const DeleteUser = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <Image
-        source={require('../assets/companyLogo.png')} // Replace with your image URL
+        source={require('../assets/companyLogo.png')}
         style={styles.logo}
       />
             <Text style={styles.title}>Supprimer un compte utilisateur</Text>

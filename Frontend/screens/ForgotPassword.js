@@ -21,17 +21,10 @@ const ForgotPassword = ({ navigation }) => {
   
     try {
       const response = await axios.post('http://192.168.1.8:3000/forgot-password', { email });
-  
-      // Store the token received from the server
       const resetToken = response.data.token;
       setToken(resetToken);
-  
       Alert.alert('Success', `Reset token generated: ${resetToken}`);
-  
-      // Clear the email input field
       setEmail('');
-  
-      // Navigate to the ResetPassword screen and pass the token as a parameter
       navigation.navigate('ResetPassword', { token: resetToken });
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message || 'Une erreur inconnue est survenue.';
@@ -46,7 +39,7 @@ const ForgotPassword = ({ navigation }) => {
         <Text style={styles.backButtonText}>Back to Login</Text>
       </TouchableOpacity>
       <Image
-        source={require('../assets/companyLogo.png')} // Replace with your image URL
+        source={require('../assets/companyLogo.png')}
         style={styles.logo}
       />
       <Text style={styles.title}>Forgot Password</Text>
@@ -108,7 +101,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 3,
     textAlign: 'center',
-    alignSelf: 'center', // Centering horizontally
+    alignSelf: 'center',
   },
   button: {
     backgroundColor: '#77CAEE',

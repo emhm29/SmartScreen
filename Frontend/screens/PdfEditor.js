@@ -12,28 +12,23 @@ const PdfEditor = () => {
       const result = await DocumentPicker.getDocumentAsync({
         type: 'application/pdf',
       });
-
-      console.log('DocumentPicker Result:', result);
-
+  
       if (!result.canceled && result.assets && result.assets.length > 0) {
         const uri = result.assets[0].uri;
-        console.log('URI:', uri); 
-
+  
         if (!uri) {
           throw new Error('Invalid URI');
         }
-
+  
         const fileData = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
         const base64Uri = `data:application/pdf;base64,${fileData}`;
         setPdfBase64(base64Uri);
-
+  
         Alert.alert('PDF Uploaded', `PDF has been uploaded from: ${uri}`);
       } else {
-        console.error('Invalid result or URI');
         Alert.alert('Error', 'Invalid result or URI');
       }
     } catch (err) {
-      console.error('Error:', err); 
       Alert.alert('Error', 'Failed to upload PDF. Please try again later.');
     }
   };
@@ -45,16 +40,17 @@ const PdfEditor = () => {
         const base64Data = pdfBase64.split('base64,')[1]; 
         await FileSystem.writeAsStringAsync(fileUri, base64Data, { encoding: FileSystem.EncodingType.Base64 });
         Alert.alert('PDF Downloaded', `PDF has been saved to ${fileUri}`);
-      } catch (error) {
-        console.error('Error downloading PDF:', error);
+      } catch {
         Alert.alert('Error', 'Failed to download PDF. Please try again later.');
       }
+    } else {
+      Alert.alert('Error', 'No PDF data available to download.');
     }
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Button title="UPLOAD PDF" onPress={handleUploadPDF} color="#0288D1" />
+      <Button title="UPLOAD PDF" onPress={handleUploadPDF} color="#77CAEE" />
       {pdfBase64 ? (
         <View style={styles.pdfContainer}>
           <WebView
@@ -62,7 +58,7 @@ const PdfEditor = () => {
             source={{ uri: pdfBase64 }}
             style={styles.pdf}
           />
-          <Button title="DOWNLOAD EDITED PDF" onPress={handleDownloadPDF} color="#0288D1" />
+          <Button title="DOWNLOAD EDITED PDF" onPress={handleDownloadPDF} color="#77CAEE" />
         </View>
       ) : (
         <Text style={styles.noPdfText}>No PDF uploaded</Text>

@@ -139,18 +139,21 @@ const InvoiceRecognition = () => {
             body: JSON.stringify(data),
         });
 
+        // Log the response status
+        console.log('Response status:', response.status);
+
         if (!response.ok) {
             const errorText = await response.text();
-            console.error('Failed to send data to backend:', errorText);
-            Alert.alert('Error', 'Failed to send data to backend');
+            console.error('Error response:', errorText);
+            Alert.alert('Error', 'Failed to send data to backend: ' + errorText);
         } else {
             Alert.alert('Success', 'Invoice data sent to backend successfully');
         }
     } catch (error) {
-        console.error('Error sending data to backend:', error);
+        console.error('Fetch error:', error);
         Alert.alert('Error', `Error sending data to backend: ${error.message}`);
     }
-  };
+};
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -224,7 +227,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   button: {
-    backgroundColor: '#003366',
+    backgroundColor: '#77CAEE',
     padding: 15,
     borderRadius: 5,
     marginBottom: 20,

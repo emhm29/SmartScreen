@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
   closeButton: {
     marginTop: 10,
     padding: 10,
-    backgroundColor: '#003366',
+    backgroundColor: '#77CAEE',
     borderRadius: 10,
   },
   closeButtonText: {
@@ -313,7 +313,7 @@ const styles = StyleSheet.create({
   downloadButton: {
     marginTop: 10,
     padding: 10,
-    backgroundColor: '#003366',
+    backgroundColor: '#77CAEE',
     borderRadius: 10,
   },
   downloadButtonText: {

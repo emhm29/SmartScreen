@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { Image } from "expo-image";
 const CreateUser = ({ navigation }) => {
     const [username, setUsername] = useState('');
@@ -30,7 +30,12 @@ const CreateUser = ({ navigation }) => {
                 secureTextEntry
                 style={styles.input}
             />
-            <Button title="Créer" onPress={handleCreateUser} />
+                        <TouchableOpacity
+                style={styles.button}
+                onPress={handleCreateUser}
+            >
+                <Text style={styles.buttonText}>Créer</Text>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -54,11 +59,25 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
     logo: {
-        width: 100,
-        height: 20,
+        width: 250,
+        height: 70,
         alignSelf: 'center',
         marginBottom: 20,
       },
+      button: {
+        backgroundColor: '#77CAEE',
+        padding: 10,
+        borderRadius: 10,
+        alignItems: 'center',
+        alignSelf: 'center',
+        marginTop: 10,
+        width: '50%',
+    },
+    buttonText: {
+        color: "#fff",
+        fontSize: 16,
+        textAlign: "center",
+    },
 });
 
 export default CreateUser;
